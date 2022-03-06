@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			const card = document.createElement('img');
 			card.setAttribute('src', './images/blank.jpg');
 			card.setAttribute('data-id', i);
+			card.classList.add('card');
 			card.addEventListener('click', flipCard);
 			grid.appendChild(card);
 		}
@@ -76,21 +77,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	function checkForMatch() {
 		const cards = document.querySelectorAll('#grid img');
+		const optionOneId = cardsChosenIds[0];
+		const optionTwoId = cardsChosenIds[1];
 
+		if (optionOneId === optionTwoId) {
+			alert('You clicked the same card!');
+			cards[optionOneId].setAttribute('src', './images/blank.jpg');
+			cards[optionTwoId].setAttribute('src', './images/blank.jpg');
+		}
 		if (cardsChosen[0] === cardsChosen[1]) {
-			alert('You found a match!');
 			cardsWon.push(cardsChosen);
-			cards[cardsChosenIds[0]].setAttribute('src', './images/correct.jpg');
-			cards[cardsChosenIds[1]].setAttribute('src', './images/correct.jpg');
-			cards[cardsChosenIds[0]].removeEventListener('click', flipCard);
-			cards[cardsChosenIds[1]].removeEventListener('click', flipCard);
+			cards[optionOneId].setAttribute('src', './images/correct.jpg');
+			cards[optionTwoId].setAttribute('src', './images/correct.jpg');
+			cards[optionOneId].removeEventListener('click', flipCard);
+			cards[optionTwoId].removeEventListener('click', flipCard);
 			cardsWon.push(cardsChosen);
 			alert('You found a match!');
 		} else {
-			alert('Sorry, try again.');
+			cards[optionOneId].setAttribute('src', './images/blank.jpg');
+			cards[optionTwoId].setAttribute('src', './images/blank.jpg');
 		}
+		resultDisplay.textContent = cardsWon.length / 2;
+
 		cardsChosen = [];
 		cardsChosenIds = [];
+
+		if(cardsWon.length === cardArray.length/2) {
+			resultDisplay.textContent = 'Congratulations, you found them all!';
+		}
 	}
 
 	function flipCard() {
